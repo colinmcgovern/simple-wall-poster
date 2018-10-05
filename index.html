@@ -1,19 +1,69 @@
 <head>
   
   <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-  <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
   <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" type="text/css" href="/style.css">
 
 </head>
 
 <body>
 
-  <h1>Title</h1>
-  <button id="new_user" class="#logged_out_display">New User</button>
-  <button id="login" class="#logged_out_display">Login</button>
+	<!-- New User Popup --> 
+	<div id="new_user_popup" class="hover_bkgr_fricc">
+	    <span class="helper"></span>
+	    <div>
+	        <div class="popupCloseButton">X</div>
+	        <h2>New User</h2>
+	        <div class="reject_text"></div>
+	        Username: <input id="new_user_username" class="text_entry" type="text"></input><br>
+	        Password: <input id="new_user_password" class="text_entry" type="password"></input><br>
+	        <button id="new_user_submit">Submit</button>
+	    </div>
+	</div>
 
+	<!-- Login Popup --> 
+	<div id="login_popup" class="hover_bkgr_fricc">
+	    <span class="helper"></span>
+	    <div>
+	        <div class="popupCloseButton">X</div>
+	        <h2>New User</h2>
+	        <div class="reject_text"></div>
+	        Username: <input id="login_username" class="text_entry" type="text"></input><br>
+	        Password: <input id="login_password" class="text_entry" type="password"></input><br>
+	        <button id="login_submit">Submit</button>
+	    </div>
+	</div>
+
+	<div class="main">
+
+  <h1>Simple Wall Poster</h1>
+
+	  <!-- Logged Out Display --> 
+	  <p>
+		  <button id="new_user" class="logged_out_display">New User</button>
+		  <button id="login" class="logged_out_display">Login</button>
+
+		  <!-- Logged In Display --> 
+		  <div id="user_display" class="logged_in_display">Hello, </div>
+		  <button id="logout" class="logged_in_display">Log Out</button>
+
+		  <br><br><br>
+
+		  <table id="post_table"></table>
+
+		</p>
+
+	</div>
+
+  <div class="parallax"></div>
+
+  <script src="/client.js"></script>
 
 </body>
 

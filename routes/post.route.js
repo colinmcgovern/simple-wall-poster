@@ -6,7 +6,8 @@ const post_controller = require('../controllers/post.controller');
 
 module.exports = router; 
 
-router.post('/create',post_controller.product_create); //create
-router.get('/:id',post_controller.product_details); //read 
-router.put('/:id/update', post_controller.product_update); //update
-router.delete('/:id/delete', post_controller.product_delete); //delete
+
+router.post('/create',post_controller.post_create); //create
+router.get('/:id',post_controller.post_details); //read
+router.put('/:id/update', post_controller.post_update); //update
+router.delete('/:id/delete', post_controller.post_delete); //delete

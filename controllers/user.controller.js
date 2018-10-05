@@ -22,19 +22,33 @@ function set_login_timeout(hours){
 
 const login_timeout = set_login_timeout(24);
 
+
+//Checking if password passes security 
+function check_username(username){
+	if(username.length < 3){
+		return "~Username too short";
+	}
+	else if(username.length > 16){
+		return "~Username too long";
+	}
+	else{
+		return "Pass";
+	}
+}
+
 //Checking if password passes security 
 function check_password_security(password){
 	if(password.length < 8){
-		return "Password too short";
+		return "~Password too short";
 	}
 	else if(!/\d/.test(password)){
-		return "Password does not contain number";
+		return "~Password does not contain number";
 	}
 	else if(!/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(password)){
-		return "Password does not contain symbol";
+		return "~Password does not contain symbol";
 	}
 	else if(!/[a-z]/.test(password) || !/[A-Z]/.test(password)){
-		return "Password must contain one upper and lower case letter"
+		return "~Password must contain one upper and lower case letter"
 	}
 	else{
 		return "Pass";
@@ -49,7 +63,7 @@ exports.user_create = function (req, res) {
 	//User Creation 
 	if(req.body.user_creation == "1"){
 
-		User.findOne({ username: req.body.username }, {username: 1 }, function (err, result) {
+		User.findOne({ username: req.body.username.toUpperCase() }, {username: 1 }, function (err, result) {
 	        if (err) return next(err);
 	        
 	        //Checking if username already exits
@@ -57,13 +71,17 @@ exports.user_create = function (req, res) {
 
 	        	if(check_password_security(req.body.password)!="Pass"){
 	        		res.send(check_password_security(req.body.password));
-	        	}else{
+	        	}
+	        	else if(check_username(req.body.username.toUpperCase())!="Pass"){
+	        		res.send(check_username(req.body.username.toUpperCase()));
+	        	}
+	        	else{
 
 					var new_token = gen_token();
 					var salt = gen_token();
 
 					var user = new User({
-						username: req.body.username,
+						username: req.body.username.toUpperCase(),
 						password: hash_pass(req.body.password,salt),
 						token: new_token,
 						salt: salt,
@@ -80,7 +98,7 @@ exports.user_create = function (req, res) {
 	        	}
 
 	        }else{
-	        	res.send('username already exists');
+	        	res.send('~Username already exists');
 	        }
 
 	    });
@@ -88,7 +106,7 @@ exports.user_create = function (req, res) {
 	}else{
 
 		//User Logging In
-		User.findOne({ username: req.body.username }, {password: 1, salt: 1, token: 1}, function (err, result) {
+		User.findOne({ username: req.body.username.toUpperCase() }, {password: 1, salt: 1, token: 1}, function (err, result) {
 
 			if(result != null){
 
@@ -97,11 +115,11 @@ exports.user_create = function (req, res) {
 				if(hash_pass(req.body.password,result.salt) == result.password){
 					res.send(result.token);
 				}else{
-					res.send('password not correct');
+					res.send('~Password is not correct');
 				}
 
 			}else{
-				res.send('username not found');
+				res.send('~Username not found');
 			}
 
 		});
@@ -115,12 +133,12 @@ exports.user_details = function (req, res) {
 		if (err) return next(err);
 
 		if(result == null){
-			res.send('token not found');
+			res.send(''); //Token not found 
 		}
 		else if((now.micro() - result.last_login) > login_timeout){
-			res.send('token has expired');
+			res.send(''); //Token has expired
 		}else{
-			res.send(result.username);
+			res.send(result.username.toUpperCase());
 		}
     });
 };
