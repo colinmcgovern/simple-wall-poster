@@ -1,7 +1,8 @@
 var user_info = ""; //this will be filled with user's data from db
 
 
-function microtime_to_date_string(microtime){
+function microtime_to_date_string(nanotime){
+	var microtime = nanotime/1000; 
 	var time = new Date().getTime();
 	var date = new Date(microtime);
 	return date.toString();

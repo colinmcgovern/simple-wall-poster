@@ -23,7 +23,7 @@ const user = require('./routes/user.route');
 
 //Set up mongoose connnection 
 const mongoose = require('mongoose');
-var dev_db_url = 'mongodb://colinmcg:PASSWORDGOESHERE1@ds113853.mlab.com:13853/productstutorial';
+var dev_db_url = 'mongodb://colinmcg:PUTPASSWORDHERE@ds113853.mlab.com:13853/productstutorial';
 var mongoDB = process.env.MONGODB_URI || dev_db_url;
 mongoose.connect(mongoDB, { useNewUrlParser: true });
 mongoose.Promise = global.Promise; 

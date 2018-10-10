@@ -11,7 +11,7 @@ exports.post_create = function (req, res) {
 
 		if(result != null){
 			var post = new Post({
-				text: req.body.text,
+				text: req.body.text + " ",
 				created_by: result.username.toUpperCase(),
 				creation_time: now.micro()
 			});
