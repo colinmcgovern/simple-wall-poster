@@ -1,3 +1,12 @@
+var user_info = ""; //this will be filled with user's data from db
+
+
+function microtime_to_date_string(microtime){
+	var time = new Date().getTime();
+	var date = new Date(microtime);
+	return date.toString();
+}
+
 function refresh_display(){
 
 	update_user_info(Cookies.get('token'));
@@ -9,7 +18,21 @@ function refresh_display(){
 		$('.logged_in_display').show();
 		$('.logged_out_display').hide();		
 	}
+}
 
+function update_new_post_display(){
+	//Adding row to submit if user is logged in 
+	var submit_row = '';
+
+	if((user_info != null)&&(user_info!="")){
+		submit_row += '<tr>'
+		submit_row += '<td class="nowrap">' + user_info + '</td>';
+		submit_row += '<td><input id="new_post_text" class="text_entry" type="text"></td>'; 
+		submit_row += '<td><button id="create_post" class="logged_in_display">Create Post</button></td>';
+		submit_row += '</tr>';
+	}
+
+	$('#new_post_table').html(submit_row);
 }
 
 function clean_user_outputs_inputs(){
@@ -19,8 +42,6 @@ function clean_user_outputs_inputs(){
 
 function update_posts(){
 
-	$('#post_table').html( '<tr><th>Username</th><th>Message</th><th>Creation Date</th></tr>' ); 
-
     $.ajax({
 		method: "GET",
 		url: "/posts/all",
@@ -28,23 +49,16 @@ function update_posts(){
 			for(var i = 0; i < data.length; i++){
 				var new_row = ''; 
 				new_row += '<tr>';
-				new_row += '<td>' + data[i].created_by + '</td>';
-				new_row += '<td>' + data[i].text + '</td>';
-				new_row += '<td>' + data[i].creation_time + '</td>';
+				new_row += '<td class="nowrap">' + data[i].created_by + '</td>';
+				new_row += '<td class="message_cell">' + data[i].text.replace(/(<([^>]+)>)/g, "") + '</td>';  //TODO have this replace be on the server side 
+				new_row += '<td class="nowrap">' + microtime_to_date_string(data[i].creation_time) + '</td>';
 				new_row += '</tr>';
 				$('#post_table').html( $('#post_table').html() + new_row );
 			}
 
-			if((user_info != null)&&(user_info!="")){
-				var submit_row = '';
-				submit_row += '<tr>'
-				submit_row += '<td>' + user_info + '</td>';
-				submit_row += '<td><input id="new_post_text" class="text_entry" type="text"></td>'; 
-				submit_row += '<td><button id="create_post" class="logged_in_display">Create Post</button></td>';
-				submit_row += '</tr>';
-			}
-
-			$('#post_table').html( $('#post_table').html() + submit_row );
+			//Scrolling to bottom of scrollable
+		    var height = $('.scrollable')[0].scrollHeight;
+		    $('.scrollable').scrollTop(height);
 
 		}
     });
@@ -63,15 +77,14 @@ function update_user_info(token){
 			}else{
 				user_info = data;
 				$('#user_display').text('Hello, ' + user_info);
+				update_new_post_display();
 			}	
 			update_posts();
 		}
     });
 }
 
-
-var user_info = ""; //this will be filled with user's data from db
-
+//On Page Load
 $(document).ready(function() {
 	refresh_display();
 	clean_user_outputs_inputs();
@@ -120,7 +133,6 @@ $("#login").click(function(){
 	clean_user_outputs_inputs();
 });
 
-
 $('.popupCloseButton').click(function(){
 	$('#login_popup').hide();
 	clean_user_outputs_inputs();
@@ -166,5 +178,6 @@ $(document).on('click', '#create_post', function() {
 
 //Logout Button
 $(document).on('click', '#logout', function() {	Cookies.remove('token');
+	user_info = "";
 	refresh_display();
 });

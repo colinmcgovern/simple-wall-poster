@@ -40,9 +40,16 @@
 	    </div>
 	</div>
 
+	<div class="parallax"></div>
+
 	<div class="main">
 
-  <h1>Simple Wall Poster</h1>
+	  <h1>Simple Wall Poster</h1>
+		<li>Create or log into an account my using the buttons below</li>
+		<li>A user must be logged in to create a post</li>
+		<li><font color="red">Do not use a password which you use on other websites. The transport layer of this application is unencrypted</font></li>
+		<li>This page will be ugly until I come around to fixing the css</li>
+		<br>
 
 	  <!-- Logged Out Display --> 
 	  <p>
@@ -55,13 +62,19 @@
 
 		  <br><br><br>
 
-		  <table id="post_table"></table>
+      <div class="scrollable">
+      	<table id="post_table" border="1"></table>
+      </div>
 
+      <table id="new_post_table"></table>
+      
 		</p>
 
 	</div>
 
-  <div class="parallax"></div>
+	<div class="parallax"></div>
+
+  
 
   <script src="/client.js"></script>
 

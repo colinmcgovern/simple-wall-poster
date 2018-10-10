@@ -106,6 +106,7 @@ exports.user_create = function (req, res) {
 	}else{
 
 		//User Logging In
+		//TODO update last_login after non new user login
 		User.findOne({ username: req.body.username.toUpperCase() }, {password: 1, salt: 1, token: 1}, function (err, result) {
 
 			if(result != null){
@@ -135,9 +136,13 @@ exports.user_details = function (req, res) {
 		if(result == null){
 			res.send(''); //Token not found 
 		}
-		else if((now.micro() - result.last_login) > login_timeout){
-			res.send(''); //Token has expired
-		}else{
+
+		//TODO fix server side token expiration 
+		/*else if((now.micro() - result.last_login) > login_timeout){
+			res.send('expired'); //Token has expired
+		}*/
+
+		else{
 			res.send(result.username.toUpperCase());
 		}
     });
